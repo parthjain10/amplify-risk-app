@@ -100,7 +100,7 @@ export default function Home() {
         <section className="leftPane">
           {/* Shelf with vertical spines standing on a horizontal shelf */}
           <div className="shelfCard">
-            <div className="shelfHint">Hover a spine to pull the book out. Click works on mobile.</div>
+           
 
             <div className="shelfWrap">
               {/* Spines */}
@@ -123,13 +123,13 @@ export default function Home() {
                         {g.key === "printer" ? "PRINTER" : g.key === "slicer" ? "SLICER" : "OTHER"}
                       </div>
                       <div className="spineTitle">{g.title}</div>
-                      <div className="spineSmall">{isActive ? "OPEN" : "HOVER"}</div>
+                     
                       <div className="pageEdge" />
 
                     </div>
                   );
                 })}
-                <div className="shelfPlank" />
+                
               </div>
 
               {/* Opened book (shows inputs INSIDE it) */}
