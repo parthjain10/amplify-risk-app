@@ -210,3 +210,298 @@
   .openInputs{ grid-template-columns: 1fr; }
   .spine{ width: 96px; height: 220px; }
 }
+/* ===== FORCE THE LOOK (paste at very bottom) ===== */
+
+:root{
+  --text: #0f172a;
+  --muted: rgba(15, 23, 42, 0.68);
+  --card: rgba(255,255,255,0.74);
+  --border: rgba(15,23,42,0.10);
+}
+
+/* Background (your screenshot is plain white because something overrides body) */
+html, body { height: 100%; }
+
+body{
+  margin:0;
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  background:
+    radial-gradient(1200px 800px at 10% 10%, rgba(99,102,241,0.26), transparent 60%),
+    radial-gradient(1000px 700px at 90% 20%, rgba(16,185,129,0.22), transparent 55%),
+    radial-gradient(900px 650px at 50% 95%, rgba(236,72,153,0.18), transparent 55%),
+    linear-gradient(135deg, #f8fafc, #eef2ff) !important;
+}
+
+/* Force the 2-column layout so results stay on the extreme right */
+.grid-main{
+  display: grid !important;
+  grid-template-columns: 1fr 380px !important;
+  gap: 16px !important;
+  align-items: start !important;
+}
+
+@media (max-width: 1000px){
+  .grid-main{ grid-template-columns: 1fr !important; }
+}
+
+/* Sticky results on the right */
+.stickyResults{
+  position: sticky;
+  top: 18px;
+  height: fit-content;
+}
+@media (max-width: 1000px){
+  .stickyResults{ position: static; }
+}
+
+/* Hero heading: nicer font for title, keep clean for rest */
+.hero{ text-align:center; margin: 10px 0 22px; }
+.heroTitle{
+  font-family: ui-serif, Georgia, "Times New Roman", Times;
+  font-weight: 900;
+  font-size: 48px;
+  letter-spacing: -0.03em;
+  background: linear-gradient(90deg, #6366f1, #10b981, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.heroSub{
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* Cards */
+.card{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 14px 40px rgba(2,6,23,0.10);
+}
+.card-pad{ padding: 16px; }
+
+/* LEFT shelf zone layout (spines + opened book beside it) */
+.shelfCard{
+  background: rgba(255,255,255,0.70);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 14px 40px rgba(2,6,23,0.10);
+  padding: 14px;
+}
+
+.shelfWrap{
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+@media (max-width: 1100px){
+  .shelfWrap{ grid-template-columns: 1fr; }
+}
+
+.spineRow{
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  perspective: 1400px;
+}
+
+/* Shelf plank */
+.shelfPlank{
+  width: 100%;
+  height: 14px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, rgba(148,163,184,0.95), rgba(203,213,225,0.75));
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.7), 0 10px 24px rgba(2,6,23,0.10);
+  margin-top: 12px;
+}
+
+/* SPINES: more “book spine” look */
+.spine{
+  width: 88px;
+  height: 290px;
+  border-radius: 12px 12px 7px 7px;
+  position: relative;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  overflow: hidden;
+  border: 1px solid rgba(15,23,42,0.18);
+  box-shadow: 0 14px 30px rgba(2,6,23,0.14);
+  transition: transform 260ms cubic-bezier(.2,.8,.2,1),
+              filter 260ms cubic-bezier(.2,.8,.2,1),
+              opacity 260ms cubic-bezier(.2,.8,.2,1),
+              box-shadow 260ms cubic-bezier(.2,.8,.2,1);
+}
+
+/* Cloth texture + sheen */
+.spine::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(120px 220px at 30% 20%, rgba(255,255,255,0.18), transparent 60%),
+    repeating-linear-gradient(180deg, rgba(255,255,255,0.08) 0px, rgba(255,255,255,0.08) 1px, transparent 9px, transparent 13px),
+    linear-gradient(90deg, rgba(0,0,0,0.22), transparent 22%);
+  opacity: 0.9;
+  pointer-events:none;
+}
+
+/* Ridge */
+.spine::after{
+  content:"";
+  position:absolute;
+  left: 12px;
+  top: 10px;
+  bottom: 10px;
+  width: 14px;
+  border-radius: 9px;
+  background: linear-gradient(90deg, rgba(0,0,0,0.22), rgba(255,255,255,0.10));
+  opacity: 0.65;
+  pointer-events:none;
+}
+
+/* Page edge (depth) */
+.spine .pageEdge{
+  position:absolute;
+  right:-10px;
+  top:0;
+  width:10px;
+  height:100%;
+  border-radius:0 9px 9px 0;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.42), rgba(255,255,255,0.12)),
+    repeating-linear-gradient(180deg, rgba(15,23,42,0.12) 0px, rgba(15,23,42,0.12) 1px, transparent 6px, transparent 10px);
+  pointer-events:none;
+}
+
+/* Themes */
+.spine.printer{ background: linear-gradient(180deg, rgba(79,70,229,1), rgba(99,102,241,1)); }
+.spine.slicer { background: linear-gradient(180deg, rgba(5,150,105,1), rgba(16,185,129,1)); }
+.spine.other  { background: linear-gradient(180deg, rgba(190,24,93,1), rgba(236,72,153,1)); }
+
+.spineFoil{
+  position:absolute; top: 14px; left: 12px; right:12px;
+  text-align:center;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.28em;
+  color: rgba(255,255,255,0.95);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+}
+.spineTitle{
+  position:absolute; left: 50%; top: 54%;
+  transform: translate(-50%,-50%) rotate(-90deg);
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.92);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+}
+.spineSmall{
+  position:absolute; bottom: 14px; left: 12px; right: 12px;
+  text-align:center;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: rgba(255,255,255,0.80);
+}
+
+/* Focus behavior (strong + guaranteed) */
+.spine.active{
+  transform: translateY(-10px) translateZ(50px) rotateY(-18deg);
+  box-shadow: 0 24px 60px rgba(2,6,23,0.18);
+  z-index: 6;
+}
+.spine.dim{
+  opacity: 0.30 !important;
+  filter: blur(1.2px) saturate(0.75) !important;
+}
+
+/* OPEN BOOK: real “cover opens” animation */
+.openBook{
+  position: relative;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.75);
+  border: 1px solid var(--border);
+  box-shadow: 0 14px 40px rgba(2,6,23,0.10);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  transform-style: preserve-3d;
+}
+
+/* Book cover that flips open */
+.openBook::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.20), rgba(255,255,255,0.06)),
+    radial-gradient(800px 300px at 10% 10%, rgba(99,102,241,0.14), transparent 60%),
+    radial-gradient(700px 260px at 90% 20%, rgba(16,185,129,0.12), transparent 60%),
+    linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+  transform-origin: left center;
+  transform: rotateY(78deg);
+  box-shadow: 14px 0 30px rgba(2,6,23,0.18);
+  pointer-events:none;
+}
+
+/* Animate open on change */
+.openBook.opening::before{
+  animation: coverOpen 420ms cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes coverOpen{
+  from{ transform: rotateY(78deg); }
+  to{ transform: rotateY(0deg); }
+}
+
+.openBookHeader{
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(15,23,42,0.08);
+  display:flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.openBookTitle{ font-size: 18px; font-weight: 900; letter-spacing: -0.01em; }
+.openBookHint{ margin-top: 4px; font-size: 12px; color: var(--muted); }
+.openBookBody{ padding: 14px 16px 16px; }
+
+/* Inputs inside the open book */
+.openInputs{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 12px;
+}
+@media (max-width: 1100px){ .openInputs{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 650px){
+  .openInputs{ grid-template-columns: 1fr; }
+  .spine{ width: 96px; height: 220px; }
+}
+
+/* Form controls (nice) */
+.label{ font-size: 13px; margin-bottom: 6px; color: var(--muted); }
+.select{
+  width: 100%;
+  padding: 10px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: rgba(255,255,255,0.92);
+  color: var(--text);
+  outline: none;
+}
+.select:focus{
+  border-color: rgba(99,102,241,0.55);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.18);
+}
+
+.btn{
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(15,23,42,0.12);
+  background: rgba(255,255,255,0.88);
+  cursor: pointer;
+}
+.btn:hover{ background: rgba(255,255,255,0.98); }
