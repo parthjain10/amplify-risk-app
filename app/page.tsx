@@ -124,6 +124,8 @@ export default function Home() {
                       </div>
                       <div className="spineTitle">{g.title}</div>
                       <div className="spineSmall">{isActive ? "OPEN" : "HOVER"}</div>
+                      <div className="pageEdge" />
+
                     </div>
                   );
                 })}
@@ -131,7 +133,7 @@ export default function Home() {
               </div>
 
               {/* Opened book (shows inputs INSIDE it) */}
-              <div className="openBook" key={active}>
+              <div className="openBook opening" key={active}>
                 <div className="openBookHeader">
                   <div>
                     <div className="openBookTitle">{activeGroup.title}</div>
