@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import { VARIABLES, FAILURE_MODES, computeScores } from "./riskModel";
 
 export default function Home() {
-  // init defaults from the model file
   const [selected, setSelected] = useState<Record<string, string>>(() => {
     const init: Record<string, string> = {};
     for (const v of VARIABLES) {
@@ -15,33 +14,32 @@ export default function Home() {
 
   const { perFailureMode, total } = useMemo(() => computeScores(selected), [selected]);
 
+  const resetDefaults = () => {
+    const init: Record<string, string> = {};
+    for (const v of VARIABLES) init[v.id] = v.defaultValue ?? v.options[0]?.label ?? "";
+    setSelected(init);
+  };
+
   return (
-    <main style={{ maxWidth: 1100, margin: "0 auto", padding: 24, fontFamily: "system-ui" }}>
-      <h1 style={{ fontSize: 28, marginBottom: 6 }}>Amplify — Print Failure Risk</h1>
-      <p style={{ marginTop: 0, opacity: 0.75, marginBottom: 18 }}>
-        Excel logic rebuilt as a web app (33 variables → 6 failure modes → total risk).
+    <main className="container">
+      <h1 className="h1">Amplify — Print Failure Risk</h1>
+      <p className="sub">
+        Select settings → see failure-mode risks + total risk (Excel logic rebuilt in web form).
       </p>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 360px", gap: 18 }}>
-        {/* Left: Inputs */}
-        <section style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12, padding: 16 }}>
-          <h2 style={{ fontSize: 18, marginTop: 0 }}>Inputs</h2>
+      <div className="grid-main">
+        {/* Inputs */}
+        <section className="card card-pad">
+          <h2 style={{ margin: "0 0 12px", fontSize: 18 }}>Inputs</h2>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <div className="inputs-grid">
             {VARIABLES.map((v) => (
-              <label key={v.id} style={{ display: "block" }}>
-                <div style={{ fontSize: 13, marginBottom: 6, opacity: 0.85 }}>{v.label}</div>
+              <div key={v.id}>
+                <div className="label">{v.label}</div>
                 <select
+                  className="select"
                   value={selected[v.id]}
                   onChange={(e) => setSelected((s) => ({ ...s, [v.id]: e.target.value }))}
-                  style={{
-                    width: "100%",
-                    padding: "10px 10px",
-                    borderRadius: 10,
-                    border: "1px solid rgba(255,255,255,0.18)",
-                    background: "rgba(0,0,0,0.2)",
-                    color: "inherit",
-                  }}
                 >
                   {v.options.map((o) => (
                     <option key={o.label} value={o.label}>
@@ -49,53 +47,41 @@ export default function Home() {
                     </option>
                   ))}
                 </select>
-              </label>
+              </div>
             ))}
           </div>
 
-          <button
-            onClick={() => {
-              const init: Record<string, string> = {};
-              for (const v of VARIABLES) init[v.id] = v.defaultValue ?? v.options[0]?.label ?? "";
-              setSelected(init);
-            }}
-            style={{
-              marginTop: 14,
-              padding: "10px 12px",
-              borderRadius: 10,
-              border: "1px solid rgba(255,255,255,0.18)",
-              background: "rgba(255,255,255,0.06)",
-              color: "inherit",
-              cursor: "pointer",
-            }}
-          >
+          <button className="btn" onClick={resetDefaults}>
             Reset to Excel defaults
           </button>
         </section>
 
-        {/* Right: Results */}
-        <aside style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12, padding: 16, height: "fit-content" }}>
-          <h2 style={{ fontSize: 18, marginTop: 0 }}>Results</h2>
+        {/* Results */}
+        <aside className="card card-pad" style={{ height: "fit-content" }}>
+          <h2 style={{ margin: "0 0 12px", fontSize: 18 }}>Results</h2>
 
-          <div style={{ padding: 12, borderRadius: 12, border: "1px solid rgba(255,255,255,0.12)", marginBottom: 12 }}>
-            <div style={{ fontSize: 13, opacity: 0.8 }}>Total Risk of Failure (average)</div>
-            <div style={{ fontSize: 34, fontWeight: 700, lineHeight: 1.1 }}>{total.toFixed(2)}</div>
+          <div className="kpi">
+            <div className="kpi-title">Total Risk of Failure (average)</div>
+            <div className="kpi-value">{total.toFixed(2)}</div>
           </div>
 
-          <div style={{ display: "grid", gap: 10 }}>
+          <div className="fm-grid">
             {FAILURE_MODES.map((fm, i) => (
-              <div key={fm} style={{ padding: 12, borderRadius: 12, border: "1px solid rgba(255,255,255,0.12)" }}>
-                <div style={{ fontSize: 13, opacity: 0.8 }}>{i + 1}) {fm}</div>
-                <div style={{ fontSize: 22, fontWeight: 650 }}>{perFailureMode[i].toFixed(2)}</div>
+              <div key={fm} className="fm-item">
+                <div className="fm-name">
+                  {i + 1}) {fm}
+                </div>
+                <div className="fm-score">{perFailureMode[i].toFixed(2)}</div>
               </div>
             ))}
           </div>
+
+          <p style={{ marginTop: 12, fontSize: 12, color: "var(--muted)" }}>
+            Tip: This layout is responsive—3 columns on desktop, 2 on medium screens, 1 on mobile.
+          </p>
         </aside>
       </div>
-
-      <p style={{ marginTop: 16, opacity: 0.65, fontSize: 12 }}>
-        Note: Scores match your Excel structure: option score (0–10) × importance% per failure mode, summed across variables.
-      </p>
     </main>
   );
 }
+
