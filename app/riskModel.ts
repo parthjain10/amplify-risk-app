@@ -1,4 +1,3 @@
-// app/riskModel.ts
 export const FAILURE_MODES = [
   "Part Displacement / Bed Adhesion Failure",
   "Layer Shift",
@@ -13,14 +12,11 @@ export type FailureModeIndex = 0 | 1 | 2 | 3 | 4 | 5;
 export type VariableDef = {
   id: string;
   label: string;
-  // each option = dropdown value + its risk score (0–10)
   options: { label: string; score: number }[];
-  // importance % for FM1..FM6 (from your VARIABLE IMPORTANCE sheet)
   importance: [number, number, number, number, number, number];
   defaultValue?: string;
 };
 
-// Built directly from your Amplify.xlsx (INPUT + RISK MODEL + VARIABLE IMPORTANCE)
 export const VARIABLES: VariableDef[] = [
   {
     id: "room_temperature_celcius",
@@ -58,12 +54,12 @@ export const VARIABLES: VariableDef[] = [
     defaultValue: "Anycubic",
     options: [
       { label: "Creality", score: 1 },
-      { label: "Anycubic", score: 2 },
-      { label: "FlashForge", score: 2 },
       { label: "Prusa", score: 3 },
       { label: "Bambu Lab", score: 5 },
       { label: "Ultimaker", score: 6 },
       { label: "Raise3D", score: 6 },
+      { label: "FlashForge", score: 2 },
+      { label: "Anycubic", score: 2 },
       { label: "Other", score: 7 },
     ],
     importance: [0, 2, 0, 0, 0, 0],
@@ -73,8 +69,8 @@ export const VARIABLES: VariableDef[] = [
     label: "Printer Enclosure",
     defaultValue: "Full",
     options: [
-      { label: "None", score: 10 },
-      { label: "Partial", score: 5 },
+      { label: "No", score: 9 },
+      { label: "Partial", score: 4 },
       { label: "Full", score: 0 },
     ],
     importance: [15, 0, 0, 3, 19, 0],
@@ -84,10 +80,10 @@ export const VARIABLES: VariableDef[] = [
     label: "Printer Age",
     defaultValue: ">5 years",
     options: [
-      { label: "<1 year", score: 0 },
-      { label: "1–3 years", score: 2 },
-      { label: "3–5 years", score: 5 },
-      { label: ">5 years", score: 8 },
+      { label: "<1 year", score: 2 },
+      { label: "1–3 years", score: 3 },
+      { label: "3–5 years", score: 6 },
+      { label: ">5 years", score: 9 },
     ],
     importance: [0, 6, 0, 0, 0, 0],
   },
@@ -96,10 +92,10 @@ export const VARIABLES: VariableDef[] = [
     label: "Base Stability",
     defaultValue: "Very unstable",
     options: [
-      { label: "Very stable", score: 0 },
-      { label: "Stable", score: 2 },
-      { label: "Slightly unstable", score: 5 },
-      { label: "Very unstable", score: 9 },
+      { label: "Very unstable", score: 10 },
+      { label: "Moderately stable", score: 7 },
+      { label: "Stable", score: 3 },
+      { label: "Rigid", score: 0 },
     ],
     importance: [0, 14, 0, 0, 0, 0],
   },
@@ -108,12 +104,11 @@ export const VARIABLES: VariableDef[] = [
     label: "Filament Type",
     defaultValue: "PLA",
     options: [
-      { label: "PLA", score: 2 },
+      { label: "PLA", score: 1 },
       { label: "PETG", score: 4 },
-      { label: "ABS/ASA", score: 6 },
-      { label: "TPU", score: 7 },
-      { label: "Nylon", score: 9 },
-      { label: "Other", score: 6 },
+      { label: "ABS", score: 6 },
+      { label: "Nylon", score: 8 },
+      { label: "TPU", score: 8 },
     ],
     importance: [2, 0, 5, 4, 7, 2],
   },
@@ -122,9 +117,9 @@ export const VARIABLES: VariableDef[] = [
     label: "Filament Dry",
     defaultValue: "No",
     options: [
-      { label: "Yes", score: 0 },
-      { label: "No", score: 8 },
-      { label: "Unsure", score: 5 },
+      { label: "Yes", score: 1 },
+      { label: "Partially", score: 5 },
+      { label: "No", score: 7 },
     ],
     importance: [2, 0, 27, 0, 3, 15],
   },
@@ -133,8 +128,8 @@ export const VARIABLES: VariableDef[] = [
     label: "Dust",
     defaultValue: "High",
     options: [
-      { label: "Low", score: 0 },
-      { label: "Medium", score: 4 },
+      { label: "Low", score: 2 },
+      { label: "Medium", score: 5 },
       { label: "High", score: 8 },
     ],
     importance: [2, 0, 12, 0, 0, 0],
@@ -144,11 +139,10 @@ export const VARIABLES: VariableDef[] = [
     label: "Printer Glue",
     defaultValue: "Special adhesion sheet",
     options: [
-      { label: "None", score: 8 },
-      { label: "Glue stick", score: 3 },
-      { label: "Hairspray", score: 4 },
+      { label: "None", score: 9 },
+      { label: "Glue stick", score: 2 },
+      { label: "Hair spray", score: 4 },
       { label: "Special adhesion sheet", score: 0 },
-      { label: "Other", score: 5 },
     ],
     importance: [15, 0, 0, 0, 2, 0],
   },
@@ -157,10 +151,10 @@ export const VARIABLES: VariableDef[] = [
     label: "Printer Maintenance",
     defaultValue: "None",
     options: [
-      { label: "Regular", score: 0 },
+      { label: "Regular", score: 1 },
       { label: "Occasional", score: 4 },
-      { label: "Never", score: 9 },
-      { label: "None", score: 6 },
+      { label: "Rare", score: 7 },
+      { label: "None", score: 10 },
     ],
     importance: [2, 11, 5, 0, 2, 0],
   },
@@ -169,10 +163,10 @@ export const VARIABLES: VariableDef[] = [
     label: "Nozzle Diameter",
     defaultValue: "0.2 mm",
     options: [
-      { label: "0.2 mm", score: 7 },
-      { label: "0.4 mm", score: 2 },
-      { label: "0.6 mm", score: 1 },
-      { label: "0.8 mm", score: 0 },
+      { label: "0.2 mm", score: 8 },
+      { label: "0.4 mm", score: 3 },
+      { label: "0.6 mm", score: 2 },
+      { label: "0.8 mm", score: 1 },
     ],
     importance: [0, 0, 13, 5, 0, 0],
   },
@@ -182,10 +176,8 @@ export const VARIABLES: VariableDef[] = [
     defaultValue: "<190",
     options: [
       { label: "<190", score: 8 },
-      { label: "190–200", score: 4 },
-      { label: "200–210", score: 1 },
-      { label: "210–220", score: 0 },
-      { label: ">220", score: 5 },
+      { label: "190–220", score: 2 },
+      { label: ">220", score: 7 },
     ],
     importance: [0, 0, 11, 5, 9, 20],
   },
@@ -194,11 +186,9 @@ export const VARIABLES: VariableDef[] = [
     label: "Nozzle Life",
     defaultValue: ">4 years",
     options: [
-      { label: "<6 months", score: 0 },
-      { label: "6–12 months", score: 2 },
-      { label: "1–2 years", score: 4 },
-      { label: "2–4 years", score: 6 },
-      { label: ">4 years", score: 8 },
+      { label: "<2 years", score: 2 },
+      { label: "2–4 years", score: 5 },
+      { label: ">4 years", score: 9 },
     ],
     importance: [0, 0, 6, 0, 0, 0],
   },
@@ -207,9 +197,8 @@ export const VARIABLES: VariableDef[] = [
     label: "Bed Temperature",
     defaultValue: "50–60 °C",
     options: [
-      { label: "<40 °C", score: 8 },
-      { label: "40–50 °C", score: 4 },
-      { label: "50–60 °C", score: 0 },
+      { label: "<50 °C", score: 9 },
+      { label: "50–60 °C", score: 1 },
       { label: ">60 °C", score: 6 },
     ],
     importance: [8, 0, 0, 3, 14, 0],
@@ -219,10 +208,10 @@ export const VARIABLES: VariableDef[] = [
     label: "Overhangs",
     defaultValue: ">60°",
     options: [
-      { label: "<30°", score: 0 },
-      { label: "30–45°", score: 2 },
-      { label: "45–60°", score: 5 },
-      { label: ">60°", score: 9 },
+      { label: "No", score: 0 },
+      { label: "<45°", score: 2 },
+      { label: "45–60°", score: 6 },
+      { label: ">60°", score: 10 },
     ],
     importance: [0, 6, 0, 20, 0, 0],
   },
@@ -231,8 +220,8 @@ export const VARIABLES: VariableDef[] = [
     label: "Supports",
     defaultValue: "No",
     options: [
-      { label: "Yes", score: 0 },
       { label: "No", score: 8 },
+      { label: "Yes", score: 2 },
     ],
     importance: [0, 2, 0, 15, 0, 0],
   },
@@ -243,8 +232,7 @@ export const VARIABLES: VariableDef[] = [
     options: [
       { label: "<10%", score: 8 },
       { label: "10–20%", score: 4 },
-      { label: "20–40%", score: 2 },
-      { label: ">40%", score: 0 },
+      { label: ">20%", score: 2 },
     ],
     importance: [0, 1, 0, 10, 0, 0],
   },
@@ -253,10 +241,11 @@ export const VARIABLES: VariableDef[] = [
     label: "3D Print Contact Area",
     defaultValue: ">10000 mm²",
     options: [
-      { label: "<1000 mm²", score: 10 },
-      { label: "1000–5000 mm²", score: 6 },
-      { label: "5000–10000 mm²", score: 3 },
-      { label: ">10000 mm²", score: 0 },
+      { label: "<100 mm²", score: 10 },
+      { label: "100–500 mm²", score: 8 },
+      { label: "500–2000 mm²", score: 5 },
+      { label: "2000–10000 mm²", score: 3 },
+      { label: ">10000 mm²", score: 0.5 },
     ],
     importance: [18, 2, 0, 0, 7, 0],
   },
@@ -265,11 +254,10 @@ export const VARIABLES: VariableDef[] = [
     label: "Print Speed",
     defaultValue: ">100 mm/s",
     options: [
-      { label: "<40 mm/s", score: 0 },
-      { label: "40–60 mm/s", score: 2 },
-      { label: "60–80 mm/s", score: 4 },
-      { label: "80–100 mm/s", score: 6 },
-      { label: ">100 mm/s", score: 8 },
+      { label: "<40 mm/s", score: 2 },
+      { label: "40–70 mm/s", score: 4 },
+      { label: "70–100 mm/s", score: 7 },
+      { label: ">100 mm/s", score: 10 },
     ],
     importance: [0, 12, 2, 10, 8, 10],
   },
@@ -278,10 +266,10 @@ export const VARIABLES: VariableDef[] = [
     label: "First Layer Speed",
     defaultValue: "<15 mm/s",
     options: [
-      { label: "<15 mm/s", score: 0 },
-      { label: "15–25 mm/s", score: 3 },
-      { label: "25–35 mm/s", score: 6 },
-      { label: ">35 mm/s", score: 9 },
+      { label: "<15 mm/s", score: 1 },
+      { label: "15–30 mm/s", score: 3 },
+      { label: "30–50 mm/s", score: 7 },
+      { label: ">50 mm/s", score: 10 },
     ],
     importance: [6, 0, 0, 0, 0, 0],
   },
@@ -291,7 +279,8 @@ export const VARIABLES: VariableDef[] = [
     defaultValue: ">0.36 mm",
     options: [
       { label: "<0.12 mm", score: 6 },
-      { label: "0.12–0.36 mm", score: 2 },
+      { label: "0.12–0.24 mm", score: 2 },
+      { label: "0.24–0.36 mm", score: 4 },
       { label: ">0.36 mm", score: 6 },
     ],
     importance: [4, 0, 2, 10, 2, 5],
@@ -301,11 +290,10 @@ export const VARIABLES: VariableDef[] = [
     label: "Print Geometry",
     defaultValue: "Very complex",
     options: [
-      { label: "Very simple", score: 0 },
-      { label: "Simple", score: 2 },
-      { label: "Moderate", score: 4 },
-      { label: "Complex", score: 7 },
-      { label: "Very complex", score: 10 },
+      { label: "Simple", score: 1 },
+      { label: "Moderate", score: 2 },
+      { label: "Complex", score: 6 },
+      { label: "Very complex", score: 8 },
     ],
     importance: [7, 12, 0, 5, 1, 0],
   },
@@ -314,8 +302,8 @@ export const VARIABLES: VariableDef[] = [
     label: "Raft",
     defaultValue: "Yes",
     options: [
+      { label: "No", score: 8 },
       { label: "Yes", score: 0 },
-      { label: "No", score: 6 },
     ],
     importance: [13, 0, 0, 0, 2, 0],
   },
@@ -324,8 +312,10 @@ export const VARIABLES: VariableDef[] = [
     label: "Brim",
     defaultValue: "No",
     options: [
-      { label: "Yes", score: 0 },
       { label: "No", score: 4 },
+      { label: "Small (≤5 mm)", score: 3 },
+      { label: "Medium (5–10 mm)", score: 2 },
+      { label: "Large (>10 mm)", score: 1 },
     ],
     importance: [2, 0, 0, 0, 2, 0],
   },
@@ -334,11 +324,18 @@ export const VARIABLES: VariableDef[] = [
     label: "Infill Pattern",
     defaultValue: "Grid",
     options: [
-      { label: "Grid", score: 2 },
-      { label: "Gyroid", score: 1 },
-      { label: "Cubic", score: 1 },
-      { label: "Lines", score: 3 },
-      { label: "Other", score: 4 },
+      { label: "Lines", score: 6 },
+      { label: "Grid", score: 5 },
+      { label: "Triangles", score: 4 },
+      { label: "Gyroid", score: 2 },
+      { label: "Cubic", score: 4 },
+      { label: "Adaptive Cubic", score: 4 },
+      { label: "Quarter Cubic", score: 2 },
+      { label: "Support Cubic", score: 6 },
+      { label: "Lightning", score: 8 },
+      { label: "Honeycomb", score: 2 },
+      { label: "3D Honeycomb", score: 4 },
+      { label: "Hilbert Curve", score: 10 },
     ],
     importance: [0, 0, 0, 0, 1, 0],
   },
@@ -347,10 +344,10 @@ export const VARIABLES: VariableDef[] = [
     label: "Infill Percentage",
     defaultValue: ">50%",
     options: [
-      { label: "<10%", score: 0 },
-      { label: "10–30%", score: 1 },
-      { label: "30–50%", score: 3 },
-      { label: ">50%", score: 6 },
+      { label: "<10%", score: 9 },
+      { label: "10–25%", score: 6 },
+      { label: "25–50%", score: 3 },
+      { label: ">50%", score: 2 },
     ],
     importance: [0, 8, 0, 0, 2, 0],
   },
@@ -359,9 +356,10 @@ export const VARIABLES: VariableDef[] = [
     label: "Wall Count",
     defaultValue: ">4",
     options: [
-      { label: "1–2", score: 0 },
-      { label: "3–4", score: 2 },
-      { label: ">4", score: 5 },
+      { label: "1", score: 9 },
+      { label: "2", score: 6 },
+      { label: "3–4", score: 3 },
+      { label: ">4", score: 1 },
     ],
     importance: [0, 8, 0, 0, 3, 0],
   },
@@ -371,9 +369,9 @@ export const VARIABLES: VariableDef[] = [
     defaultValue: "0–25%",
     options: [
       { label: "0–25%", score: 7 },
-      { label: "25–50%", score: 3 },
-      { label: "50–75%", score: 1 },
-      { label: "75–100%", score: 0 },
+      { label: "25–50%", score: 5 },
+      { label: "50–75%", score: 3 },
+      { label: "75–100%", score: 6 },
     ],
     importance: [0, 1, 0, 10, 5, 3],
   },
@@ -382,10 +380,10 @@ export const VARIABLES: VariableDef[] = [
     label: "Retraction",
     defaultValue: ">6 mm",
     options: [
-      { label: "0–2 mm", score: 0 },
-      { label: "2–4 mm", score: 2 },
-      { label: "4–6 mm", score: 5 },
-      { label: ">6 mm", score: 8 },
+      { label: "<1 mm", score: 7 },
+      { label: "1–3 mm", score: 2 },
+      { label: "3–6 mm", score: 4 },
+      { label: ">6 mm", score: 9 },
     ],
     importance: [0, 0, 4, 0, 0, 30],
   },
@@ -395,7 +393,9 @@ export const VARIABLES: VariableDef[] = [
     defaultValue: "Off",
     options: [
       { label: "Off", score: 6 },
-      { label: "On", score: 0 },
+      { label: "<0.2 mm", score: 4 },
+      { label: "0.2–0.6 mm", score: 2 },
+      { label: ">0.6 mm", score: 8 },
     ],
     importance: [0, 3, 0, 0, 0, 5],
   },
@@ -404,10 +404,10 @@ export const VARIABLES: VariableDef[] = [
     label: "Acceleration",
     defaultValue: "<500",
     options: [
-      { label: "<500", score: 0 },
-      { label: "500–1500", score: 3 },
-      { label: "1500–3000", score: 6 },
-      { label: ">3000", score: 9 },
+      { label: "<500", score: 2 },
+      { label: "500–1500", score: 4 },
+      { label: "1500–3000", score: 7 },
+      { label: ">3000", score: 10 },
     ],
     importance: [0, 12, 0, 0, 0, 0],
   },
@@ -425,18 +425,14 @@ export const VARIABLES: VariableDef[] = [
 
 export function computeScores(selected: Record<string, string>) {
   const perFailureMode = new Array<number>(FAILURE_MODES.length).fill(0);
-
   for (const v of VARIABLES) {
     const choice = selected[v.id] ?? v.defaultValue ?? v.options[0]?.label;
     const opt = v.options.find(o => o.label === choice) ?? v.options[0];
     const score = opt?.score ?? 0;
-
     for (let i = 0; i < 6; i++) {
       perFailureMode[i] += score * (v.importance[i] / 100);
     }
   }
-
-  const total = perFailureMode.reduce((a, b) => a + b, 0) / perFailureMode.length;
-
+  const total = perFailureMode.reduce((a,b)=>a+b,0) / perFailureMode.length;
   return { perFailureMode, total };
 }
