@@ -89,42 +89,54 @@ export default function Home() {
 
   return (
     <main className="container">
-      <h1 className="h1">Amplify — Print Failure Risk</h1>
-      <p className="sub">Hover a book spine to pull it out. Click works on mobile.</p>
+      {/* Center flashy heading */}
+      <header className="heroHead">
+        <h1 className="heroTitle">Risk Engine</h1>
+        <p className="heroSub">
+          A sustainability-driven initiative to predict 3D print failures before you press “Print”.
+        </p>
+      </header>
 
       <div className="grid-main">
-        {/* Left: Real book spines + open book */}
-        <section className="bookshelf">
-          {/* Spines */}
-          <div className="spines">
-            {GROUPS.map((g) => {
-              const isActive = active === g.key;
-              return (
-                <div
-                  key={g.key}
-                  className={`spine ${g.key} ${isActive ? "active" : "dim"}`}
-                  onMouseEnter={() => setActive(g.key)}
-                  onClick={() => setActive(g.key)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") setActive(g.key);
-                  }}
-                >
-                  <div className="spineTitle">{g.title}</div>
-                  <div className="spineHint">{isActive ? "Open" : "Hover"}</div>
-                </div>
-              );
-            })}
-            <div className="shelfBase" />
+        {/* Left: Library shelf + open panel */}
+        <section className="libraryZone">
+          <div className="libraryShelfCard">
+            <div className="shelfTopHint">Browse categories like books on a shelf (hover / click)</div>
+
+            <div className="shelfRow">
+              {GROUPS.map((g) => {
+                const isActive = active === g.key;
+
+                return (
+                  <div
+                    key={g.key}
+                    className={`bookSpine ${g.key} ${isActive ? "active" : "dim"}`}
+                    onMouseEnter={() => setActive(g.key)}
+                    onClick={() => setActive(g.key)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") setActive(g.key);
+                    }}
+                    title="Hover to pull out"
+                  >
+                    <div className="spineFoil">{g.key === "printer" ? "PRINTER" : g.key === "slicer" ? "SLICER" : "OTHER"}</div>
+                    <div className="spineTitle">{g.title}</div>
+                    <div className="spineSmall">{isActive ? "OPEN" : "HOVER"}</div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="shelfPlank" />
           </div>
 
-          {/* Opened book */}
-          <div className="openBook">
-            <div className="openBookHeader">
+          {/* Opened book/panel */}
+          <div className="openPanel">
+            <div className="openPanelHeader">
               <div>
-                <div className="openBookTitle">{activeGroup.title}</div>
-                <div className="openBookSub">{activeGroup.hint}</div>
+                <div className="openPanelTitle">{activeGroup.title}</div>
+                <div className="openPanelHint">{activeGroup.hint}</div>
               </div>
 
               <button className="btn" onClick={resetDefaults} style={{ marginTop: 0 }}>
@@ -132,7 +144,7 @@ export default function Home() {
               </button>
             </div>
 
-            <div className="openBookBody">
+            <div className="openPanelBody">
               <div className="openInputs">
                 {activeGroup.ids.map((id) => {
                   const v = varById.get(id);
@@ -156,12 +168,16 @@ export default function Home() {
                   );
                 })}
               </div>
+
+              <div style={{ marginTop: 12, fontSize: 12, color: "var(--muted)" }}>
+                Tip: Change a few values and watch Total Risk + Failure Mode scores update live.
+              </div>
             </div>
           </div>
         </section>
 
         {/* Right: Results */}
-        <aside className="card card-pad" style={{ height: "fit-content" }}>
+        <aside className="card card-pad stickyResults">
           <h2 style={{ margin: "0 0 12px", fontSize: 18 }}>Results</h2>
 
           <div className="kpi">
