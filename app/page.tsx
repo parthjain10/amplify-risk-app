@@ -70,7 +70,6 @@ export default function Home() {
   });
 
   const [active, setActive] = useState<GroupKey>("printer");
-
   const { perFailureMode, total } = useMemo(() => computeScores(selected), [selected]);
 
   const varById = useMemo(() => {
@@ -89,94 +88,92 @@ export default function Home() {
 
   return (
     <main className="container">
-      {/* Center flashy heading */}
-      <header className="heroHead">
-        <h1 className="heroTitle">Risk Engine</h1>
-        <p className="heroSub">
+      <header className="hero">
+        <div className="heroTitle">Risk Engine</div>
+        <div className="heroSub">
           A sustainability-driven initiative to predict 3D print failures before you press “Print”.
-        </p>
+        </div>
       </header>
 
       <div className="grid-main">
-        {/* Left: Library shelf + open panel */}
-        <section className="libraryZone">
-          <div className="libraryShelfCard">
-            <div className="shelfTopHint">Browse categories like books on a shelf (hover / click)</div>
+        {/* LEFT */}
+        <section className="leftPane">
+          {/* Shelf with vertical spines standing on a horizontal shelf */}
+          <div className="shelfCard">
+            <div className="shelfHint">Hover a spine to pull the book out. Click works on mobile.</div>
 
-            <div className="shelfRow">
-              {GROUPS.map((g) => {
-                const isActive = active === g.key;
-
-                return (
-                  <div
-                    key={g.key}
-                    className={`bookSpine ${g.key} ${isActive ? "active" : "dim"}`}
-                    onMouseEnter={() => setActive(g.key)}
-                    onClick={() => setActive(g.key)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") setActive(g.key);
-                    }}
-                    title="Hover to pull out"
-                  >
-                    <div className="spineFoil">{g.key === "printer" ? "PRINTER" : g.key === "slicer" ? "SLICER" : "OTHER"}</div>
-                    <div className="spineTitle">{g.title}</div>
-                    <div className="spineSmall">{isActive ? "OPEN" : "HOVER"}</div>
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="shelfPlank" />
-          </div>
-
-          {/* Opened book/panel */}
-          <div className="openPanel">
-            <div className="openPanelHeader">
-              <div>
-                <div className="openPanelTitle">{activeGroup.title}</div>
-                <div className="openPanelHint">{activeGroup.hint}</div>
-              </div>
-
-              <button className="btn" onClick={resetDefaults} style={{ marginTop: 0 }}>
-                Reset defaults
-              </button>
-            </div>
-
-            <div className="openPanelBody">
-              <div className="openInputs">
-                {activeGroup.ids.map((id) => {
-                  const v = varById.get(id);
-                  if (!v) return null;
-
+            <div className="shelfWrap">
+              {/* Spines */}
+              <div className="spineRow">
+                {GROUPS.map((g) => {
+                  const isActive = active === g.key;
                   return (
-                    <div key={v.id}>
-                      <div className="label">{v.label}</div>
-                      <select
-                        className="select"
-                        value={selected[v.id]}
-                        onChange={(e) => setSelected((s) => ({ ...s, [v.id]: e.target.value }))}
-                      >
-                        {v.options.map((o) => (
-                          <option key={o.label} value={o.label}>
-                            {o.label}
-                          </option>
-                        ))}
-                      </select>
+                    <div
+                      key={g.key}
+                      className={`spine ${g.key} ${isActive ? "active" : "dim"}`}
+                      onMouseEnter={() => setActive(g.key)}
+                      onClick={() => setActive(g.key)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") setActive(g.key);
+                      }}
+                    >
+                      <div className="spineFoil">
+                        {g.key === "printer" ? "PRINTER" : g.key === "slicer" ? "SLICER" : "OTHER"}
+                      </div>
+                      <div className="spineTitle">{g.title}</div>
+                      <div className="spineSmall">{isActive ? "OPEN" : "HOVER"}</div>
                     </div>
                   );
                 })}
+                <div className="shelfPlank" />
               </div>
 
-              <div style={{ marginTop: 12, fontSize: 12, color: "var(--muted)" }}>
-                Tip: Change a few values and watch Total Risk + Failure Mode scores update live.
+              {/* Opened book (shows inputs INSIDE it) */}
+              <div className="openBook" key={active}>
+                <div className="openBookHeader">
+                  <div>
+                    <div className="openBookTitle">{activeGroup.title}</div>
+                    <div className="openBookHint">{activeGroup.hint}</div>
+                  </div>
+
+                  <button className="btn" onClick={resetDefaults}>
+                    Reset defaults
+                  </button>
+                </div>
+
+                <div className="openBookBody">
+                  <div className="openInputs">
+                    {activeGroup.ids.map((id) => {
+                      const v = varById.get(id);
+                      if (!v) return null;
+
+                      return (
+                        <div key={v.id}>
+                          <div className="label">{v.label}</div>
+                          <select
+                            className="select"
+                            value={selected[v.id]}
+                            onChange={(e) => setSelected((s) => ({ ...s, [v.id]: e.target.value }))}
+                          >
+                            {v.options.map((o) => (
+                              <option key={o.label} value={o.label}>
+                                {o.label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Right: Results */}
+        {/* RIGHT: Results stay extreme right */}
         <aside className="card card-pad stickyResults">
           <h2 style={{ margin: "0 0 12px", fontSize: 18 }}>Results</h2>
 
