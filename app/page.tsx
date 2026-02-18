@@ -177,24 +177,26 @@ export default function Home() {
 
         {/* RIGHT: Results stay extreme right */}
         <aside className="card card-pad stickyResults">
-          <h2 style={{ margin: "0 0 12px", fontSize: 18 }}>Results</h2>
+         <div className="resultsHeader">
+    <div className="resultsTitle">Results</div>
+  </div>
 
-          <div className="kpi">
-            <div className="kpi-title">Total Risk of Failure (average)</div>
-            <div className="kpi-value">{total.toFixed(2)}</div>
-          </div>
+  <div className="totalBox">
+    <div className="totalLabel">Total Risk of Failure (average)</div>
+    <div className="totalValue">{total.toFixed(2)}</div>
+  </div>
 
-          <div className="fm-grid">
-            {FAILURE_MODES.map((fm, i) => (
-              <div key={fm} className="fm-item">
-                <div className="fm-name">
-                  {i + 1}) {fm}
-                </div>
-                <div className="fm-score">{perFailureMode[i].toFixed(2)}</div>
-              </div>
-            ))}
-          </div>
-        </aside>
+  <div className="fmList">
+    {FAILURE_MODES.map((fm, i) => (
+      <div key={fm} className="fmRow">
+        <div className="fmName">
+          {i + 1}) {fm}
+        </div>
+        <div className="fmScorePill">{perFailureMode[i].toFixed(2)}</div>
+      </div>
+    ))}
+  </div>
+</aside>
       </div>
     </main>
   );
