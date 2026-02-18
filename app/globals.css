@@ -280,3 +280,174 @@ body {
   .bookInputs { grid-template-columns: 1fr; }
   .book.active { transform: translateX(0px) translateY(-4px) translateZ(0px) scale(1.01); }
 }
+/* === Vertical Bookshelf (real spines) === */
+
+.bookshelf {
+  position: relative;
+  display: grid;
+  grid-template-columns: 92px 1fr; /* left: spines, right: opened panel */
+  gap: 16px;
+  align-items: start;
+  perspective: 1400px;
+}
+
+@media (max-width: 1000px) {
+  .bookshelf {
+    grid-template-columns: 1fr;
+  }
+}
+
+.spines {
+  position: sticky;
+  top: 18px;
+  display: grid;
+  gap: 10px;
+  padding: 12px 10px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 24px rgba(2,6,23,0.08);
+}
+
+.shelfBase {
+  margin-top: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(15,23,42,0.14), rgba(15,23,42,0.03));
+}
+
+.spine {
+  height: 170px;
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transform-style: preserve-3d;
+
+  /* looks like a spine */
+  background: linear-gradient(180deg, rgba(255,255,255,0.25), rgba(255,255,255,0.10)),
+              linear-gradient(90deg, rgba(15,23,42,0.22), rgba(15,23,42,0.02));
+  border: 1px solid rgba(15,23,42,0.14);
+  box-shadow: 0 10px 20px rgba(2,6,23,0.10);
+
+  transition: transform 220ms cubic-bezier(.2,.8,.2,1),
+              filter 220ms cubic-bezier(.2,.8,.2,1),
+              opacity 220ms cubic-bezier(.2,.8,.2,1);
+}
+
+/* spine ridges + “pages” hint */
+.spine::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg,
+      rgba(255,255,255,0.22) 0%,
+      rgba(255,255,255,0.06) 14%,
+      rgba(0,0,0,0.06) 18%,
+      transparent 26%,
+      rgba(255,255,255,0.14) 34%,
+      transparent 60%),
+    repeating-linear-gradient(
+      180deg,
+      rgba(255,255,255,0.10) 0px,
+      rgba(255,255,255,0.10) 1px,
+      transparent 7px,
+      transparent 11px
+    );
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* title rotated like a real spine */
+.spineTitle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(-90deg);
+  white-space: nowrap;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  font-size: 13px;
+  color: rgba(15,23,42,0.92);
+}
+
+.spineHint {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  font-size: 11px;
+  color: rgba(15,23,42,0.65);
+}
+
+/* active spine pops out */
+.spine.active {
+  transform: translateX(10px) rotateY(-18deg) scale(1.02);
+  z-index: 5;
+}
+
+.spine.dim {
+  opacity: 0.55;
+  filter: blur(0.6px) saturate(0.85);
+}
+
+/* Color themes per spine */
+.spine.printer { background: linear-gradient(180deg, rgba(99,102,241,0.30), rgba(99,102,241,0.12)), linear-gradient(90deg, rgba(15,23,42,0.22), rgba(15,23,42,0.02)); }
+.spine.slicer  { background: linear-gradient(180deg, rgba(16,185,129,0.30), rgba(16,185,129,0.12)), linear-gradient(90deg, rgba(15,23,42,0.22), rgba(15,23,42,0.02)); }
+.spine.other   { background: linear-gradient(180deg, rgba(236,72,153,0.28), rgba(236,72,153,0.10)), linear-gradient(90deg, rgba(15,23,42,0.22), rgba(15,23,42,0.02)); }
+
+/* The “opened book” panel */
+.openBook {
+  border-radius: 18px;
+  background: rgba(255,255,255,0.72);
+  border: 1px solid rgba(15,23,42,0.10);
+  box-shadow: 0 14px 40px rgba(2,6,23,0.10);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  transform-origin: left center;
+  animation: openBook 260ms cubic-bezier(.2,.8,.2,1) both;
+}
+
+@keyframes openBook {
+  from { transform: translateX(-10px) rotateY(8deg) scale(0.99); opacity: 0.85; }
+  to   { transform: translateX(0px) rotateY(0deg) scale(1); opacity: 1; }
+}
+
+.openBookHeader {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(15,23,42,0.08);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.openBookTitle {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.openBookSub {
+  font-size: 12px;
+  color: rgba(15,23,42,0.65);
+}
+
+.openBookBody {
+  padding: 14px 16px 16px;
+}
+
+.openInputs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 12px;
+}
+
+@media (max-width: 1100px) {
+  .openInputs { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 650px) {
+  .openInputs { grid-template-columns: 1fr; }
+  .spines { position: relative; top: 0; }
+}
